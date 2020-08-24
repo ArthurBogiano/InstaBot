@@ -19,8 +19,6 @@ Uma sessão funciona da seguinte forma:
 
 **Url do post**  ->  URL alvo do bot, onde serão executadas as ações.  Ex: https://www.instagram.com/p/BxloJsyAhCD/
 
-**Url do post**  ->  URL alvo do bot, onde serão executadas as ações.  Ex: https://www.instagram.com/p/BxloJsyAhCD/
-
 **Quantidade de voltas**  ->  Quantas vezes o bot vai repetir a fila de contas. 
 
 **Quantidade de comentários por usuário**  ->  Quantos vezes cada conta vai comentar algo predefinido por você. 
