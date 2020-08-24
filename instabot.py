@@ -87,7 +87,7 @@ class instabot:
                                 break
                     else:
                         print('[-] Para comentar @s deve cadastrar mais de uma conta')
-                        text = input('[?] Novo texto do comentario: ')
+                        text = input('[?] Novo texto do comentário: ')
                 else:
                     text = texto
 
@@ -130,19 +130,15 @@ if __name__ == '__main__':
 
         if command == 'go':
             try:
-                url = input('[?] url do post: ')
-                voltas = int(input('[?] Quantas voltas: '))
-                cmts = int(input('[?] Quantos comentarios por usuário: '))
-                texto = input('[?] Texto do comentario ("@" para contas de usuarios) : ')
-
-                while True:
-                    op = input('[?] Deseja usar timeout (s/n) ? ')
-                    if op == 's' or op == 'n':
-                        break
-
-                timeout = 0
-                if op == 's':
-                    timeout = int(input('[?] Segundos de timeout: '))
+                url = input('[?] URL do post: ')
+                voltas = int(input('[?] Voltas: '))
+                cmts = int(input('[?] Quantidade de comentários por usuário: '))
+                texto = input('[?] Texto do comentário: ')
+                timeout = input('[?] Timeout: ')
+                if timeout == '':
+                    timeout = 0
+                else:
+                    timeout = int(timeout)
 
                 instabot(sql, url, voltas, cmts, texto, timeout)
             except Exception as err:
