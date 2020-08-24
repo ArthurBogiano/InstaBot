@@ -17,6 +17,7 @@ Uma sessão funciona da seguinte forma:
 
 > O bot vai percorrer sobre todas as contas cadastradas, comentando **x** vezes **y** comentarios e curtindo a publicação.
 
+
 **Url do post**  ->  URL alvo do bot, onde serão executadas as ações.  Ex: https://www.instagram.com/p/BxloJsyAhCD/
 
 **Quantidade de voltas**  ->  Quantas vezes o bot vai repetir a fila de contas. 
