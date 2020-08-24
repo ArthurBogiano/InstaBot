@@ -27,4 +27,4 @@ Uma sessão funciona da seguinte forma:
 
 - Se digitar "@", o bot vai marcar as demais contas cadastradas nos comentários aleatóriamente  
 
-**Timeout**  ->  Tempo de espera (em segundos) após cada onda de comentários de cada conta.
+**Timeout**  ->  Tempo de espera (em segundos) após cada onda de comentários de cada conta. Default: 0
