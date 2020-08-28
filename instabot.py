@@ -5,6 +5,7 @@ from time import sleep
 import sqlite3
 import base64
 import random
+from database import *
 
 class instabot:
     # O local de execução do nosso script
@@ -39,9 +40,23 @@ class instabot:
         pwdelement = self.driver.find_element_by_class_name('Ypffh')
         pwdelement.clear()
 
+        ok = False
+        if type(comment) is list:
+            ok = True
+
         for i in range(cont):
-            print(f'[+] @{username} comentando {comment}')
-            pwdelement.send_keys(comment)
+
+            if ok:
+                while True:
+                    text = f'@{random.choice(comment)[1]}'
+                    if text != f'@{username}':
+                        break
+
+            else:
+                text = comment
+
+            print(f'[+] @{username} comentando {text}')
+            pwdelement.send_keys(text)
             self.driver.find_element_by_class_name('X7cDz').submit()
             sleep(3)
 
@@ -62,7 +77,7 @@ class instabot:
         self.driver.get('https://www.instagram.com/accounts/logout/')
         sleep(2)
 
-    def __init__(self, db, url, voltas, comments, texto='@', timeout=0):
+    def __init__(self, url, voltas, comments, texto='@', timeout=0):
 
         print('-'*50)
 
@@ -72,8 +87,8 @@ class instabot:
         self.driver = webdriver.Chrome(self.chromedriver)
         self.driver.maximize_window()
 
-        db.execute("SELECT * FROM login")
-        users = db.fetchall()
+        users = listlogins(conn)
+        marcs = listpessoas(conn)
 
         # faz login
         for i in range(voltas):
@@ -81,13 +96,28 @@ class instabot:
 
                 if texto == '@':
                     if len(users) > 1:
-                        while True:
-                            text = f'@{random.choice(users)[1]}'
-                            if text != f'@{c[1]}':
-                                break
+                        text = users
+
                     else:
-                        print('[-] Para comentar @s deve cadastrar mais de uma conta')
+                        print('[-] Para comentar @bots deve cadastrar mais de uma conta')
                         text = input('[?] Novo texto do comentário: ')
+
+                elif texto == '@@':
+                    if len(marcs) > 1:
+                        text = marcs
+
+                    else:
+                        print('[-] Para comentar @marcações deve cadastrar mais de uma conta')
+                        text = input('[?] Novo texto do comentário: ')
+
+                elif texto == '@@@':
+                    if len(marcs+users) > 1:
+                        text = marcs+users
+
+                    else:
+                        print('[-] Para comentar @marcações+bots deve cadastrar mais de uma conta')
+                        text = input('[?] Novo texto do comentário: ')
+
                 else:
                     text = texto
 
@@ -102,31 +132,39 @@ class instabot:
 
 if __name__ == '__main__':
     conn = sqlite3.connect('contas.db')
-    sql = conn.cursor()
 
-    sql.execute("CREATE TABLE IF NOT EXISTS login (id INTEGER PRIMARY KEY, user TEXT, pass TEXT)")
+    createdb(conn)
 
     while True:
         command = input('[INSTABOT] >>> ')
 
         if command == 'list':
-            sql.execute("SELECT * FROM login")
             print(' ID  |       USER       |  PASSWD')
-            for i in sql.fetchall():
+            for i in listlogins(conn):
                 print(f'  {i[0]}       {i[1]}     {base64.b64decode(i[2]).decode()}')
             print()
 
         if command == 'add':
-            query = f"INSERT INTO login (user, pass) VALUES ('{input('[?] Usuário (não o email) : ')}', '{base64.b64encode(input('[?] Senha: ').encode()).decode()}');"
-            sql.execute(query)
+            addlogin(conn, input('[?] Usuário : @'), input('[?] Senha: '))
             print('[+] Adicionado!')
-            conn.commit()
 
         if command == 'del':
-            query = f"DELETE FROM login WHERE id = {input('[?] ID da conta: ')};"
-            sql.execute(query)
+            dellogin(conn, input('[?] ID da conta: '))
             print('[+] Deletado!')
-            conn.commit()
+
+        if command == 'marc list':
+            print(' ID  |       USER       ')
+            for i in listpessoas(conn):
+                print(f'  {i[0]}       {i[1]}')
+            print()
+
+        if command == 'marc add':
+            addpessoa(conn, input('[?] Usuário : @'))
+            print('[+] Adicionado!')
+
+        if command == 'marc del':
+            delpessoa(conn, input('[?] ID do nome de usuário: '))
+            print('[+] Deletado!')
 
         if command == 'go':
             try:
@@ -140,7 +178,7 @@ if __name__ == '__main__':
                 else:
                     timeout = int(timeout)
 
-                instabot(sql, url, voltas, cmts, texto, timeout)
+                instabot(url, voltas, cmts, texto, timeout)
             except Exception as err:
                 print(f'Erro: {err}')
             print('[+] FINALIZADO!')
