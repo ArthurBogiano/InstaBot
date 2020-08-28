@@ -5,6 +5,9 @@ from time import sleep
 import sqlite3
 import base64
 import random
+
+from win32comext.axscript.server.error import Exception
+
 from database import *
 
 class instabot:
@@ -121,11 +124,17 @@ class instabot:
                 else:
                     text = texto
 
-                self.login(c[1], base64.b64decode(c[2]).decode())
-                self.comment(url, text, comments, c[1])
+                try:
+                    self.login(c[1], base64.b64decode(c[2]).decode())
+                    self.comment(url, text, comments, c[1])
+                except Exception as err:
+                    print(f'Erro: {err}')
                 print(f'[*] Aguardando timeout... ({timeout} segundos)')
                 sleep(timeout)
-                self.logout()
+                try:
+                    self.logout()
+                except Exception as err:
+                    print(f'Erro: {err}')
 
         self.driver.quit()
 
