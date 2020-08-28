@@ -5,7 +5,7 @@ Bot de comentários no instagram, usando selenium python
 
 [INSTABOT] >> **add**    ->    Adiciona nova conta
 
-[INSTABOT] >> **del**    ->    Deleta conta conta pelo "id"
+[INSTABOT] >> **del**    ->    Deleta conta pelo "id"
 
 [INSTABOT] >> **list**    ->    Lista contas cadastradas e "id" correspondente
 
@@ -13,11 +13,11 @@ Bot de comentários no instagram, usando selenium python
 
 **Comandos de marcação:**
 
-[INSTABOT] >> **marc add**    ->    Adiciona nova conta
+[INSTABOT] >> **marc add**    ->    Adiciona nova marcação
 
-[INSTABOT] >> **marc del**    ->    Deleta conta conta pelo "id"
+[INSTABOT] >> **marc del**    ->    Deleta marcação pelo "id"
 
-[INSTABOT] >> **marc list**    ->    Lista contas cadastradas e "id" correspondente
+[INSTABOT] >> **marc list**    ->    Lista marcações cadastradas e "id" correspondente
 
 ## Configuração de sessão
 
