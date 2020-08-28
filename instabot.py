@@ -22,65 +22,84 @@ class instabot:
 
         print(f'[+] logando na conta @{username}')
 
-        self.driver.get('https://www.instagram.com/')  # instagram url
-        sleep(2)
+        try:
+            self.driver.get('https://www.instagram.com/')  # instagram url
+            sleep(2)
 
-        userelement = self.driver.find_element_by_xpath('//input[@name="username"]')
-        userelement.clear()
-        userelement.send_keys(username)
+            userelement = self.driver.find_element_by_xpath('//input[@name="username"]')
+            userelement.clear()
+            userelement.send_keys(username)
 
-        pwdelement = self.driver.find_element_by_xpath('//input[@name="password"]')
-        pwdelement.clear()
-        pwdelement.send_keys(password)
-        pwdelement.send_keys(Keys.RETURN)
-        sleep(5)
+            pwdelement = self.driver.find_element_by_xpath('//input[@name="password"]')
+            pwdelement.clear()
+            pwdelement.send_keys(password)
+            pwdelement.send_keys(Keys.RETURN)
+            sleep(5)
+
+        except:
+            print('Erro: Execução da ação cancelada | login_error')
+            self.bkp_timeout = 0
+            pass
 
     # comentar em publicação
     def comment(self, url, comment, cont, username):
         self.driver.get(url)
         sleep(2)
-        self.driver.find_element_by_class_name('Ypffh').click()
-        pwdelement = self.driver.find_element_by_class_name('Ypffh')
-        pwdelement.clear()
 
-        ok = False
-        if type(comment) is list:
-            ok = True
+        try:
+            self.driver.find_element_by_class_name('Ypffh').click()
+            pwdelement = self.driver.find_element_by_class_name('Ypffh')
+            pwdelement.clear()
 
-        for i in range(cont):
+            ok = False
+            if type(comment) is list:
+                ok = True
 
-            if ok:
-                while True:
-                    text = f'@{random.choice(comment)[1]}'
-                    if text != f'@{username}':
-                        break
+            for i in range(cont):
 
-            else:
-                text = comment
+                if ok:
+                    while True:
+                        text = f'@{random.choice(comment)[1]}'
+                        if text != f'@{username}':
+                            break
 
-            print(f'[+] @{username} comentando {text}')
-            pwdelement.send_keys(text)
-            self.driver.find_element_by_class_name('X7cDz').submit()
-            sleep(3)
+                else:
+                    text = comment
+
+                print(f'[+] @{username} comentando {text}')
+                pwdelement.send_keys(text)
+                self.driver.find_element_by_class_name('X7cDz').submit()
+                sleep(3)
+        except:
+            print('Erro: Execução da ação cancelada | comment_error')
+            self.bkp_timeout = 0
+            pass
 
         self.like()
 
     # curtir a publicação
     def like(self):
-        curtir = self.driver.find_element_by_class_name('fr66n')
-        svg = curtir.find_element_by_tag_name('svg')
 
-        if svg.get_attribute('aria-label') == 'Curtir':
-            curtir.click()
+        try:
+            curtir = self.driver.find_element_by_class_name('fr66n')
+            svg = curtir.find_element_by_tag_name('svg')
 
-        sleep(2)
+            if svg.get_attribute('aria-label') == 'Curtir':
+                curtir.click()
+
+            sleep(2)
+
+        except:
+            print('Erro: Execução da ação cancelada | like_error')
+            self.bkp_timeout = 0
+            pass
 
     # logout
     def logout(self):
         self.driver.get('https://www.instagram.com/accounts/logout/')
         sleep(2)
 
-    def __init__(self, url, voltas, comments, texto='@', timeout=0):
+    def __init__(self, url, voltas, comments, texto='@@@', timeout=0):
 
         print('-'*50)
 
@@ -124,17 +143,13 @@ class instabot:
                 else:
                     text = texto
 
-                try:
-                    self.login(c[1], base64.b64decode(c[2]).decode())
-                    self.comment(url, text, comments, c[1])
-                except Exception as err:
-                    print(f'Erro: {err}')
-                print(f'[*] Aguardando timeout... ({timeout} segundos)')
-                sleep(timeout)
-                try:
-                    self.logout()
-                except Exception as err:
-                    print(f'Erro: {err}')
+                self.bkp_timeout = timeout
+                self.login(c[1], base64.b64decode(c[2]).decode())
+                self.comment(url, text, comments, c[1])
+                print(f'[*] Aguardando timeout... ({self.bkp_timeout} segundos)')
+                sleep(self.bkp_timeout)
+
+                self.logout()
 
         self.driver.quit()
 
@@ -190,6 +205,7 @@ if __name__ == '__main__':
                 instabot(url, voltas, cmts, texto, timeout)
             except Exception as err:
                 print(f'Erro: {err}')
+                pass
             print('[+] FINALIZADO!')
 
         if command == 'exit':
