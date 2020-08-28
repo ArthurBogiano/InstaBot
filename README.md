@@ -11,6 +11,14 @@ Bot de comentários no instagram, usando selenium python
 
 [INSTABOT] >> **go**    ->    Inicia configuração da sessão
 
+**Comandos de marcação:**
+
+[INSTABOT] >> **marc add**    ->    Adiciona nova conta
+
+[INSTABOT] >> **marc del**    ->    Deleta conta conta pelo "id"
+
+[INSTABOT] >> **marc list**    ->    Lista contas cadastradas e "id" correspondente
+
 ## Configuração de sessão
 
 Uma sessão funciona da seguinte forma:
@@ -27,5 +35,7 @@ Uma sessão funciona da seguinte forma:
 **Texto dos comentários**  ->  Texto que vai ser comentado no post. 
 
 - Se digitar "@", o bot vai marcar as demais contas cadastradas nos comentários aleatóriamente  
+- Se digitar "@@", o bot vai marcar as marcações cadastradas nos comentários aleatóriamente  
+- Se digitar "@@@", o bot vai marcar as demais contas e também as marcações cadastradas nos comentários aleatóriamente  
 
 **Timeout**  ->  Tempo de espera (em segundos) após cada onda de comentários de cada conta. Default: 0
